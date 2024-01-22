@@ -21,7 +21,7 @@ class crudRepository {
       const entity = await this.model.findById(id);
       return entity;
     } catch (error) {
-      console.error("in crud repository");
+      console.error("in crud repository:findOne");
       throw new customError(error.message, StatusCodes.BAD_REQUEST, error.name);
     }
   }
@@ -31,7 +31,7 @@ class crudRepository {
       const entity = await this.model.find({});
       return entity;
     } catch (error) {
-      console.error("in crud repository");
+      console.error("in crud repository:findAll");
       throw new customError(error.message, StatusCodes.BAD_REQUEST, error.name);
     }
   }
@@ -43,7 +43,7 @@ class crudRepository {
       });
       return entity;
     } catch (error) {
-      console.error("in crud repository");
+      console.error("in crud repository:update");
       throw new customError(error.message, StatusCodes.BAD_REQUEST, error.name);
     }
   }
@@ -53,7 +53,7 @@ class crudRepository {
       const entity = await this.model.findByIdAndDelete(id);
       return entity;
     } catch (error) {
-      console.error("in crud repository");
+      console.error("in crud repository:delete");
       throw new customError(error.message, StatusCodes.BAD_REQUEST, error.name);
     }
   }
