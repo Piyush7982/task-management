@@ -132,7 +132,131 @@ async function getUserTasks(data) {
     throw error;
   }
 }
+async function createAdmin(data) {
+  try {
+    const { userName } = data;
+    const user = await userRepo.getUserByCredential({ userName });
 
+    if (!Boolean(user)) {
+      throw new customError(
+        "User with this username doesnot exists",
+        StatusCodes.UNAUTHORIZED
+      );
+    }
+
+    if (user.role === "Admin") {
+      throw new customError(
+        "This user is already an admin",
+        StatusCodes.BAD_REQUEST,
+        "Duplication error"
+      );
+    }
+    const updatedUser = await userRepo.update(user._id, {
+      role: "Admin",
+    });
+
+    return updatedUser;
+  } catch (error) {
+    throw error;
+  }
+}
+async function removeAdmin(data) {
+  try {
+    const { userName } = data;
+    const user = await userRepo.getUserByCredential({ userName });
+
+    if (!Boolean(user)) {
+      throw new customError(
+        "User with this username doesnot exists",
+        StatusCodes.UNAUTHORIZED
+      );
+    }
+
+    if (user.role === "Normal") {
+      throw new customError(
+        "This user is already revoked from admin to normal user",
+        StatusCodes.BAD_REQUEST,
+        "Duplication error"
+      );
+    }
+    const updatedUser = await userRepo.update(user._id, {
+      role: "Normal",
+    });
+
+    return updatedUser;
+  } catch (error) {
+    throw error;
+  }
+}
+async function getAllUsers() {
+  try {
+    const users = await userRepo.findAll();
+    return users;
+  } catch (error) {
+    throw error;
+  }
+}
+async function getAllAdmins() {
+  try {
+    const users = await userRepo.getAllAdmins();
+    return users;
+  } catch (error) {
+    throw error;
+  }
+}
+async function adminLogin(userData) {
+  try {
+    const { userName, password } = userData;
+    const user = await userRepo.getUserByCredential({ userName });
+
+    if (!Boolean(user)) {
+      throw new customError(
+        "User with this username doesnot exists",
+        StatusCodes.UNAUTHORIZED,
+        "Validation Error"
+      );
+    }
+
+    if (!(await bcrypt.verifyPassword(password, user.password))) {
+      throw new customError(
+        "Incorrect Password",
+        StatusCodes.UNAUTHORIZED,
+        "Validation Error"
+      );
+    }
+
+    if (user.role === "Normal") {
+      throw new customError(
+        "This user is not an admin",
+        StatusCodes.UNAUTHORIZED,
+        "Validation Error"
+      );
+    }
+    const username = user.userName;
+    const id = user._id;
+    const email = user.email;
+    const token = await jwt.tokenGenerate({
+      id: user._id,
+      userName: userName,
+      email: email,
+      // expiryInSec: 60 * 60,
+    });
+    return { token, username, id, email };
+  } catch (error) {
+    throw error;
+  }
+}
+async function isAdmin(userName) {
+  try {
+    const user = await userRepo.getUserByCredential({ userName });
+    if (user.role === "Normal") {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = {
   createUser,
   getUserById,
@@ -140,4 +264,10 @@ module.exports = {
   deleteUser,
   login,
   getUserTasks,
+  createAdmin,
+  removeAdmin,
+  getAllUsers,
+  getAllAdmins,
+  adminLogin,
+  isAdmin,
 };

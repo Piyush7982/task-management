@@ -70,13 +70,41 @@ class userRepository extends crud {
       ]);
       return tasks;
     } catch (error) {
-      throw error;
+      throw new customError(
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        error.name
+      );
     }
   }
   async deleteByUsername(userName) {
     try {
       const result = await this.model.findOneAndDelete({ userName });
       return result;
+    } catch (error) {
+      throw new customError(
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        error.name
+      );
+    }
+  }
+  async getUserByCredential(data) {
+    try {
+      const user = await User.findOne(data);
+      return user;
+    } catch (error) {
+      throw new customError(
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        error.name
+      );
+    }
+  }
+  async getAllAdmins() {
+    try {
+      const admins = await User.find({ role: "Admin" });
+      return admins;
     } catch (error) {
       throw new customError(
         error.message,
