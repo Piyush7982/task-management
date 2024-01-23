@@ -40,3 +40,36 @@ const userSchema = new Schema(
 );
 const User = mongoose.model("User", userSchema);
 module.exports = User;
+
+// [{
+//   $match: { _id: ObjectId("65aed33d82c4e8e539d15184") },
+// },
+// {
+//   $project: {
+//     _id: 1,
+//     tasks: 1,
+//   },
+// },
+// {
+//   $unwind: "$tasks",
+// },
+// {
+//   $lookup: {
+//     from: "tasks",
+//     localField: "tasks",
+//     foreignField: "_id",
+//     as: "tasks",
+//   },
+// },
+// {
+//   $unwind: "$tasks",
+// },
+// {
+//   $sort: { "tasks.createdAt": -1 },
+// },
+// {
+//   $skip: 10 * (1 - 1),
+// },
+// {
+//   $limit: 1,
+// },]
