@@ -73,5 +73,17 @@ class userRepository extends crud {
       throw error;
     }
   }
+  async deleteByUsername(userName) {
+    try {
+      const result = await this.model.findOneAndDelete({ userName });
+      return result;
+    } catch (error) {
+      throw new customError(
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        error.name
+      );
+    }
+  }
 }
 module.exports = userRepository;

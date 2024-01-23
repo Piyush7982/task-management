@@ -46,7 +46,8 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    const user = await userService.deleteUser(req.user.id);
+    const user = await userService.deleteUser(req.user);
+    res.clearCookie("access_token");
     successResponse.Data = user;
     successResponse.Message = "User deleted successfully";
     return res.status(successResponse.StatusCode).json(successResponse);

@@ -5,17 +5,17 @@ const { userMiddleware } = require("../../middleware");
 
 router.post("/", userController.createUser);
 router.get(
-  "/:id",
+  "/",
   userMiddleware.authenticationMiddleware,
   userController.getUserById
 );
 router.put(
-  "/:id",
+  "/",
   userMiddleware.authenticationMiddleware,
   userController.updateUser
 );
 router.delete(
-  "/:id",
+  "/",
   userMiddleware.authenticationMiddleware,
   userController.deleteUser
 );

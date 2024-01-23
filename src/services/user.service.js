@@ -63,8 +63,9 @@ async function updateUser(id, data) {
   }
 }
 
-async function deleteUser(id) {
+async function deleteUser(data) {
   try {
+    const { id, userName } = data;
     if (!(await userRepo.existsById({ id }))) {
       throw new customError(
         "User with this id doesnot exists",
@@ -72,7 +73,7 @@ async function deleteUser(id) {
         "Not Found error"
       );
     }
-    const user = await userRepo.delete(id);
+    const user = await userRepo.deleteByUsername(userName);
     return user;
   } catch (error) {
     throw error;

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Task = require("./task.schema");
 const userSchema = new Schema(
   {
     name: {
@@ -38,38 +39,20 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.post("findOneAndDelete", async (doc, next) => {
+  const tasks = doc.tasks;
+
+  if (Boolean(tasks)) {
+    const final = await Promise.all(
+      tasks.map(async (id) => {
+        await Task.findOneAndDelete({ _id: id });
+      })
+    );
+  }
+
+  next();
+});
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
-
-// [{
-//   $match: { _id: ObjectId("65aed33d82c4e8e539d15184") },
-// },
-// {
-//   $project: {
-//     _id: 1,
-//     tasks: 1,
-//   },
-// },
-// {
-//   $unwind: "$tasks",
-// },
-// {
-//   $lookup: {
-//     from: "tasks",
-//     localField: "tasks",
-//     foreignField: "_id",
-//     as: "tasks",
-//   },
-// },
-// {
-//   $unwind: "$tasks",
-// },
-// {
-//   $sort: { "tasks.createdAt": -1 },
-// },
-// {
-//   $skip: 10 * (1 - 1),
-// },
-// {
-//   $limit: 1,
-// },]
