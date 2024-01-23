@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { errorResponse } = require("../util/common");
 const { jwt } = require("../util/authorisation");
+const { UserValidationSchema } = require("../validations");
 
 async function authenticationMiddleware(req, res, next) {
   try {
@@ -33,5 +34,51 @@ async function authenticationMiddleware(req, res, next) {
     return;
   }
 }
+async function createUserValidate(req, res, next) {
+  const { error } = await UserValidationSchema.createUserSchema.validate(
+    req.body
+  );
+  if (error) {
+    errorResponse.Message = error.details[0].message;
+    errorResponse.Error = "Joi Validation Error while creating user";
+    errorResponse.StatusCode = StatusCodes.BAD_REQUEST;
+    res.status(errorResponse.StatusCode).json(errorResponse);
+    return;
+  } else {
+    next();
+  }
+}
 
-module.exports = { authenticationMiddleware };
+async function updateUserValidate(req, res, next) {
+  const { error } = await UserValidationSchema.updateUserSchema.validate(
+    req.body
+  );
+  if (error) {
+    errorResponse.Message = error.details[0].message;
+    errorResponse.Error = "Joi Validation Error while updating user";
+    errorResponse.StatusCode = StatusCodes.BAD_REQUEST;
+    res.status(errorResponse.StatusCode).json(errorResponse);
+    return;
+  } else {
+    next();
+  }
+}
+
+async function loginValidate(req, res, next) {
+  const { error } = await UserValidationSchema.loginSchema.validate(req.body);
+  if (error) {
+    errorResponse.Message = error.details[0].message;
+    errorResponse.Error = "Joi Validation Error while login";
+    errorResponse.StatusCode = StatusCodes.BAD_REQUEST;
+    res.status(errorResponse.StatusCode).json(errorResponse);
+    return;
+  } else {
+    next();
+  }
+}
+module.exports = {
+  authenticationMiddleware,
+  createUserValidate,
+  updateUserValidate,
+  loginValidate,
+};

@@ -3,7 +3,7 @@ const router = express.Router();
 const { userController } = require("../../controller");
 const { userMiddleware } = require("../../middleware");
 
-router.post("/", userController.createUser);
+router.post("/", userMiddleware.createUserValidate, userController.createUser);
 router.get(
   "/",
   userMiddleware.authenticationMiddleware,
@@ -12,6 +12,7 @@ router.get(
 router.put(
   "/",
   userMiddleware.authenticationMiddleware,
+  userMiddleware.updateUserValidate,
   userController.updateUser
 );
 router.delete(
@@ -19,7 +20,7 @@ router.delete(
   userMiddleware.authenticationMiddleware,
   userController.deleteUser
 );
-router.post("/login", userController.login);
+router.post("/login", userMiddleware.loginValidate, userController.login);
 router.get(
   "/tasks/all",
   userMiddleware.authenticationMiddleware,
