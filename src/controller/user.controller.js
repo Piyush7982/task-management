@@ -20,7 +20,7 @@ async function createUser(req, res) {
 
 async function getUserById(req, res) {
   try {
-    const user = await userService.getUserById(req.params.id);
+    const user = await userService.getUserById(req.user.id);
     successResponse.Data = user;
     successResponse.Message = "User fetched successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
@@ -33,7 +33,7 @@ async function getUserById(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const user = await userService.updateUser(req.params.id, req.body);
+    const user = await userService.updateUser(req.user.id, req.body);
     successResponse.Data = user;
     successResponse.Message = "User updated successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
@@ -46,7 +46,7 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    const user = await userService.deleteUser(req.params.id);
+    const user = await userService.deleteUser(req.user.id);
     successResponse.Data = user;
     successResponse.Message = "User deleted successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
@@ -94,7 +94,7 @@ async function logout(req, res) {
 async function getAllTasks(req, res) {
   try {
     const tasks = await userService.getUserTasks({
-      id: req.params.id,
+      id: req.user.id,
       page: req.query.page,
       limit: req.query.limit,
     });

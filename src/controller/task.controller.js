@@ -7,7 +7,10 @@ const {
 
 async function createTask(req, res) {
   try {
-    const task = await taskService.createTask(req.body);
+    const task = await taskService.createTask({
+      ...req.body,
+      user: req.user.id,
+    });
     successResponse.Data = task;
     successResponse.Message = "Task created successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
@@ -33,7 +36,10 @@ async function getTaskById(req, res) {
 
 async function updateTask(req, res) {
   try {
-    const task = await taskService.updateTask(req.params.id, req.body);
+    const task = await taskService.updateTask(req.params.id, {
+      ...req.body,
+      user: req.user.id,
+    });
     successResponse.Data = task;
     successResponse.Message = "Task updated successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
