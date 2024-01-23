@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const { taskController } = require("../../controller");
-const { userMiddleware } = require("../../middleware");
+const { userMiddleware, taskMiddleware } = require("../../middleware");
 
 router.post(
   "/",
   userMiddleware.authenticationMiddleware,
+  taskMiddleware.createTaskValidate,
   taskController.createTask
 );
 router.get(
@@ -16,6 +17,7 @@ router.get(
 router.put(
   "/:id",
   userMiddleware.authenticationMiddleware,
+  taskMiddleware.updateTaskValidate,
   taskController.updateTask
 );
 router.delete(
