@@ -113,5 +113,17 @@ class userRepository extends crud {
       );
     }
   }
+  async getUserSecurely(id) {
+    try {
+      const user = await User.findById(id).select("-password");
+      return user;
+    } catch (error) {
+      throw new customError(
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        error.name
+      );
+    }
+  }
 }
 module.exports = userRepository;

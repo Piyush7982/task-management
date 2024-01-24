@@ -40,7 +40,7 @@ async function getUserById(id) {
         "Not Found error"
       );
     }
-    const user = await userRepo.findOne(id);
+    const user = await userRepo.getUserSecurely(id);
     return user;
   } catch (error) {
     throw error;

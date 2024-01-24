@@ -8,7 +8,7 @@ const {
 async function createUser(req, res) {
   try {
     const user = await userService.createUser(req.body);
-    successResponse.Data = user;
+    successResponse.Data = { username: user.username, email: user.email };
     successResponse.Message = "User created successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
   } catch (error) {
@@ -34,7 +34,7 @@ async function getUserById(req, res) {
 async function updateUser(req, res) {
   try {
     const user = await userService.updateUser(req.user.id, req.body);
-    successResponse.Data = user;
+    // successResponse.Data = user;
     successResponse.Message = "User updated successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
   } catch (error) {
@@ -69,7 +69,7 @@ async function login(req, res) {
     res.cookie("access_token", user.token, {
       // httpOnly: true,
       // sameSite: "strict",
-      secure: true,
+      // secure: true,
     });
 
     return res.status(successResponse.StatusCode).json(successResponse);
