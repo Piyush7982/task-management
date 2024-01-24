@@ -34,7 +34,6 @@ const updateUserSchema = Joi.object({
   name: Joi.string().min(4).max(20).pattern(nameRegex).message("invalid name"),
   occupation: Joi.string().min(4),
   password: Joi.string().min(8).max(20),
-  role: Joi.string().valid("Normal", "Admin"),
 });
 const loginSchema = Joi.object({
   userName: Joi.string().required(),

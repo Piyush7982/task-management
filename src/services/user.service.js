@@ -56,6 +56,9 @@ async function updateUser(id, data) {
         "Not Found error"
       );
     }
+    if (data.password) {
+      data.password = await bcrypt.hashPassword(data.password);
+    }
     const user = await userRepo.update(id, data);
     return user;
   } catch (error) {
