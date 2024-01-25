@@ -67,7 +67,7 @@ async function login(req, res) {
     successResponse.Data = { username, id, email };
     successResponse.Message = "User logged in successfully";
     res.cookie("access_token", user.token, {
-      // httpOnly: true,
+      httpOnly: true,
       // sameSite: "strict",
       // secure: true,
     });
