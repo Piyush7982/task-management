@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    maxAge: 1000 * 60 * 60 * 2,
+
     origin: SERVER_CONFIG.FRONTEND_URL,
     // origin: true,
   })

@@ -53,18 +53,34 @@ async function deleteUser(req, res) {
     res.status(errorResponse.StatusCode).json(errorResponse);
   }
 }
-res.cookie("access_token", user.token, {
-  sameSite: "none",
-  sameSite: false,
-  secure: true,
-  path: "/",
-  domain: ".vercel.app",
-  expires: new Date(Date.now() + 1000 * 60 * 60 * 2), // Expires in 2 hours
-});
+async function login(req, res) {
+  try {
+    const user = await userService.login({
+      userName: req.body.userName,
+      password: req.body.password,
+    });
+    const { username, id, email } = user;
+    successResponse.Data = { username, id, email };
+    successResponse.Message = "User logged in successfully";
+    res.cookie("access_token", user.token, {
+      sameSite: "none",
+      secure: true,
+      path: "/",
+      domain: ".vercel.app",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 2),
+    });
+
+    return res.status(successResponse.StatusCode).json(successResponse);
+  } catch (error) {
+    errorResponse.Message = "failed to login user";
+    errorResponse.Error = { error: error.message, name: error.name };
+    res.status(errorResponse.StatusCode).json(errorResponse);
+  }
+}
 
 async function logout(req, res) {
   try {
-    res.clearCookie("access_token");
+    res.clearCookie("access_token", { sameSite: "none", secure: true });
     successResponse.Message = "User logged out successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
   } catch (error) {
