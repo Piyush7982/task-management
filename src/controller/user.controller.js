@@ -66,8 +66,8 @@ async function login(req, res) {
       // httpOnly: true,
       sameSite: "none",
       secure: true,
-      // path: "/",
-      domain: "https://task-management-frontend-ajwx.vercel.app/",
+      path: "/",
+      domain: ".vercel.app",
       maxAge: 1000 * 60 * 60 * 2,
       // domain: "127.0.0.1",
 
