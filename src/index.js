@@ -14,8 +14,8 @@ app.use(
   cors({
     credentials: true,
 
-    origin: SERVER_CONFIG.FRONTEND_URL,
-    // origin: true,
+    // origin: SERVER_CONFIG.FRONTEND_URL,
+    origin: true,
   })
 );
 
