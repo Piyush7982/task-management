@@ -1,9 +1,5 @@
 const { userService } = require("../services");
-const {
-  successResponse,
-  errorResponse,
-  customError,
-} = require("../util/common");
+const { successResponse, errorResponse } = require("../util/common");
 
 async function createUser(req, res) {
   try {
