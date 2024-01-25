@@ -66,6 +66,8 @@ async function login(req, res) {
       // httpOnly: true,
       sameSite: "none",
       secure: true,
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 2,
       // domain: "127.0.0.1",
 
       // secure: true,
