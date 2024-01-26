@@ -59,6 +59,8 @@ async function login(req, res) {
       userName: req.body.userName,
       password: req.body.password,
     });
+    let date = new Date();
+    date.setTime(date.getTime() + 60 * 60 * 1000);
     const { username, id, email } = user;
     successResponse.Data = { username, id, email };
     successResponse.Message = "User logged in successfully";
@@ -66,8 +68,9 @@ async function login(req, res) {
       sameSite: "none",
       secure: true,
       path: "/",
-      domain: ".vercel.app",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 2),
+      expires: date,
+      // domain: ".vercel.app",
+      // maxAge: 1000 * 60 * 60 * 4,
     });
 
     return res.status(successResponse.StatusCode).json(successResponse);

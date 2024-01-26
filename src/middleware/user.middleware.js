@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const { errorResponse } = require("../util/common");
+const { errorResponse, successResponse } = require("../util/common");
 const { jwt } = require("../util/authorisation");
 const { UserValidationSchema } = require("../validations");
 
@@ -76,9 +76,45 @@ async function loginValidate(req, res, next) {
     next();
   }
 }
+async function isLoggedIn(req, res, next) {
+  try {
+    const token = req.cookies.access_token;
+
+    if (!token) {
+      errorResponse.Message = "false";
+      errorResponse.Error = "not logged in";
+      errorResponse.StatusCode = StatusCodes.UNAUTHORIZED;
+      res.status(errorResponse.StatusCode).json(errorResponse);
+      return;
+    }
+    const response = await jwt.tokenVerify(token);
+
+    if (!response.id) {
+      errorResponse.Message = "false";
+      errorResponse.Error = "not a authenticated user";
+      errorResponse.StatusCode = StatusCodes.UNAUTHORIZED;
+      res.status(errorResponse.StatusCode).json(errorResponse);
+      return;
+    }
+    req.user = response;
+
+    successResponse.Message = "true";
+    successResponse.Data = response;
+    successResponse.StatusCode = StatusCodes.OK;
+    res.status(successResponse.StatusCode).json(successResponse);
+    next();
+  } catch (error) {
+    errorResponse.Message = error.Message;
+    errorResponse.Error = error.name;
+    errorResponse.StatusCode = StatusCodes.REQUEST_TIMEOUT;
+    res.status(errorResponse.StatusCode).json(errorResponse);
+    return;
+  }
+}
 module.exports = {
   authenticationMiddleware,
   createUserValidate,
   updateUserValidate,
   loginValidate,
+  isLoggedIn,
 };

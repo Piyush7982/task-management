@@ -31,5 +31,6 @@ router.post(
   userMiddleware.authenticationMiddleware,
   userController.logout
 );
+router.get("/isLoggedIn", userMiddleware.isLoggedIn);
 
 module.exports = router;
