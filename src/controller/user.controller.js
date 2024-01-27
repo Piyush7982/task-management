@@ -69,7 +69,7 @@ async function login(req, res) {
       secure: true,
       path: "/",
       expires: date,
-      domain: ".onrender.com",
+      // domain: ".onrender.com",
       // domain: ".onrender.com",
       maxAge: 1000 * 60 * 60,
     });
