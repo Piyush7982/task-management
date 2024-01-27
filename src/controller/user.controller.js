@@ -70,7 +70,7 @@ async function login(req, res) {
       secure: true,
       path: "/",
       expires: date,
-      domain: ".vercel.app",
+      // domain: ".vercel.app",
       // maxAge: 1000 * 60 * 60 * 4,
     });
 
