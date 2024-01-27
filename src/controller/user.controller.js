@@ -70,7 +70,7 @@ async function login(req, res) {
       path: "/",
       expires: date,
       // domain: ".onrender.com",
-      // domain: ".onrender.com",
+      domain: "task-manager-front-ojiv.onrender.com",
       maxAge: 1000 * 60 * 60,
     });
 
