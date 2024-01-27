@@ -65,11 +65,12 @@ async function login(req, res) {
     successResponse.Data = { username, id, email };
     successResponse.Message = "User logged in successfully";
     res.cookie("access_token", user.token, {
-      // sameSite: "lax",
+      sameSite: "none",
+
       secure: true,
       path: "/",
       expires: date,
-      // domain: ".vercel.app",
+      domain: ".vercel.app",
       // maxAge: 1000 * 60 * 60 * 4,
     });
 
