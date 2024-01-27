@@ -66,12 +66,12 @@ async function login(req, res) {
     successResponse.Message = "User logged in successfully";
     res.cookie("access_token", user.token, {
       sameSite: "none",
-
       secure: true,
       path: "/",
       expires: date,
-      // domain: ".vercel.app",
-      // maxAge: 1000 * 60 * 60 * 4,
+      domain: ".onrender.com",
+      // domain: ".onrender.com",
+      maxAge: 1000 * 60 * 60,
     });
 
     return res.status(successResponse.StatusCode).json(successResponse);
