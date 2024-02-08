@@ -43,7 +43,7 @@ async function updateUser(req, res) {
 async function deleteUser(req, res) {
   try {
     const user = await userService.deleteUser(req.user);
-    res.clearCookie("access_token");
+    res.clearCookie("access_token", { sameSite: "none", secure: true });
     successResponse.Data = user;
     successResponse.Message = "User deleted successfully";
     return res.status(successResponse.StatusCode).json(successResponse);
@@ -64,13 +64,13 @@ async function login(req, res) {
     const { username, id, email } = user;
     successResponse.Data = { username, id, email };
     successResponse.Message = "User logged in successfully";
+
     res.cookie("access_token", user.token, {
       sameSite: "none",
+      httpOnly: true,
       secure: true,
       path: "/",
       expires: date,
-      // domain: ".onrender.com",
-      domain: "task-manager-front-ojiv.onrender.com",
       maxAge: 1000 * 60 * 60,
     });
 
@@ -110,6 +110,34 @@ async function getAllTasks(req, res) {
     res.status(errorResponse.StatusCode).json(errorResponse);
   }
 }
+async function checkIsAuthenticated(req, res) {
+  try {
+    const token = req.cookies.access_token;
+    if (!token) {
+      return res.status(401).json({
+        Data: { isAuthenticated: false },
+        Message: "Failed to authorise",
+      });
+    }
+
+    const validToken = await jwt.tokenVerify(token);
+    if (!validToken.id) {
+      res.clearCookie("access_token");
+      return res.status(401).json({
+        Data: { isAuthenticated: false },
+        Message: "Failed to authorise",
+      });
+    }
+
+    successResponse.Data = { isAuthenticated: true };
+    successResponse.Message = "Succesfully authorised";
+    return res.status(202).json(successResponse);
+  } catch (error) {
+    errorResponse.Message = "error while checking authentication";
+    errorResponse.Error = { error: error.message, name: error.name };
+    res.status(401).json(errorResponse);
+  }
+}
 
 module.exports = {
   createUser,
@@ -119,4 +147,5 @@ module.exports = {
   login,
   logout,
   getAllTasks,
+  checkIsAuthenticated,
 };

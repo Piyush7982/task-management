@@ -9,6 +9,7 @@ router.get(
   userMiddleware.authenticationMiddleware,
   userController.getUserById
 );
+router.get("/checkAuth", userController.checkIsAuthenticated);
 router.put(
   "/",
   userMiddleware.authenticationMiddleware,
